@@ -24,11 +24,17 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 
 SOURCES += \
-        main.cpp \
-        mainwindow.cpp
+    app/main.cpp \
+    app/mainwindow.cpp
 
 HEADERS += \
-        mainwindow.h
+    app/mainwindow.h
 
 FORMS += \
-        mainwindow.ui
+    resources/uis/mainwindow.ui
+
+SUBDIRS += \
+    WADDownloader.pro
+
+DISTFILES += \
+    README.md
