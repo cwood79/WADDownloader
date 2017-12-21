@@ -16,60 +16,71 @@ MainWindow::~MainWindow()
 void MainWindow::on_searchbutton_clicked()
 {
 
-    // send json request here
-    // update textbrowser
     // grab input
     QString searchText = ui->searchbar->text();
     QString searchCategory = ui->category->currentText();
     QString sortCategory = ui->sortcategory->currentText();
     QString order = ui->order->currentText();
 
-    QTextStream(stdout) << "Search text is " + searchText << endl;
+    /*QTextStream(stdout) << "Search text is " + searchText << endl;
     QTextStream(stdout) << "Search category is " + searchCategory << endl;
     QTextStream(stdout) << "Sort category is " + sortCategory << endl;
-    QTextStream(stdout) << "Order is " + order << endl;
+    QTextStream(stdout) << "Order is " + order << endl; */
 
-    // api address
-    //https://legacy.doomworld.com/idgames//api/api.php
     search(searchText, searchCategory, sortCategory, order);
 }
 
 void MainWindow::search(QString searchText, QString searchCategory, QString sortCategory, QString order)
 {
-    QNetworkAccessManager networkManager;
+    manager = new QNetworkAccessManager(this);
+    QString urlSearch = searchText.toLower();
+    QString urlSearchCategory = searchCategory.toLower();
+    QString urlSortCategory = sortCategory.toLower();
+
     // API URL
     //https://legacy.doomworld.com/idgames//api/api.php?action=
+    // https://legacy.doomworld.com/idgames//api/api.php?action=search&query=chest&type=filename&sort=date&out=json
+    QString urlString = "https://legacy.doomworld.com/idgames//api/api.php?action=search&query=" + urlSearch + "&type=" + urlSearchCategory + "&sort="
+            + urlSortCategory + "out=json";
 
-    QUrl url("https://legacy.doomworld.com/idgames//api/api.php?action=ping&out=json");
-    QNetworkRequest request;
-    request.setUrl(url);
-    //request.setHeader(QNetworkRequest::ContentTypeHeader, “application/json”);
+    connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(onResult(QNetworkReply*)));
 
-    QNetworkReply* currentReply = networkManager.get(request);
-
-    connect(&networkManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(onResult(QNetworkReply*)));
-
-    ui->textBrowser->setText("Search!");
-
+    QUrl url(urlString);
+    QNetworkReply* currentReply = manager->get(QNetworkRequest(url));
 }
 
 void MainWindow::onResult(QNetworkReply* reply)
 {
     if(reply->error() == QNetworkReply::NoError)
     {
-        QJsonDocument document = QJsonDocument::fromJson(reply->readAll());
-        QJsonObject root = document.object();
-        ui->textBrowser->append(root.keys().at(0) + ": " + root.value(root.keys().at(0)).toString());
-        QJsonValue jv = root.value("content");
+        QTextStream(stdout) << "JSON RECEIVED!" << endl;
+        QStringList fileNames;
 
-        QTextStream(stdout) << "root size is" + root.size() << endl;
+        // parse json reply
+        QString strReply = (QString)reply->readAll();
+        QJsonDocument jsonResponse = QJsonDocument::fromJson(strReply.toUtf8());
+        QJsonObject jsonObject = jsonResponse.object();
+        QJsonArray jsonArray = jsonObject["file"].toArray();
+
+        foreach(const QJsonValue & value, jsonArray)
+        {
+            QJsonObject obj = value.toObject();
+            fileNames.append(obj["title"].toString());
+
+        }
 
 
 
+        // Display file names
+        for(int i =0; i < fileNames.length(); i++)
+        {
+            ui->textBrowser->append(fileNames.at(i));
+        }
     }
     else
     {
        qDebug() << "ERROR" << endl;
+       delete reply;
     }
 
 }
