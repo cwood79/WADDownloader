@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QtNetwork>
 #include <QScriptEngine>
+#include <QScriptValueIterator>
 
 namespace Ui {
 class MainWindow;

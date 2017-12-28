@@ -41,10 +41,11 @@ void MainWindow::search(QString searchText, QString searchCategory, QString sort
     //https://legacy.doomworld.com/idgames//api/api.php?action=
     // https://legacy.doomworld.com/idgames//api/api.php?action=search&query=chest&type=filename&sort=date&out=json
     QString urlString = "https://legacy.doomworld.com/idgames//api/api.php?action=search&query=" + urlSearch + "&type=" + urlSearchCategory + "&sort="
-            + urlSortCategory + "out=json";
+            + urlSortCategory + "&out=json";
 
     connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(onResult(QNetworkReply*)));
 
+    QTextStream(stdout) << "Calling API at " + urlString << endl;
     QUrl url(urlString);
     QNetworkReply* currentReply = manager->get(QNetworkRequest(url));
 }
@@ -54,29 +55,28 @@ void MainWindow::onResult(QNetworkReply* reply)
     if(reply->error() == QNetworkReply::NoError)
     {
         QTextStream(stdout) << "JSON RECEIVED!" << endl;
-        QStringList fileNames;
-
-        // parse json reply
         QString strReply = (QString)reply->readAll();
         QJsonDocument jsonResponse = QJsonDocument::fromJson(strReply.toUtf8());
-        QJsonObject jsonObject = jsonResponse.object();
-        QJsonArray jsonArray = jsonObject["file"].toArray();
 
-        foreach(const QJsonValue & value, jsonArray)
+        QJsonObject root = jsonResponse.object();
+        QJsonObject content = root["content"].toObject();
+        QJsonArray files = content["file"].toArray();
+
+        foreach (const QJsonValue & file, files)
         {
-            QJsonObject obj = value.toObject();
-            fileNames.append(obj["title"].toString());
+            QJsonObject obj = file.toObject();
+            QTextStream(stdout) << "title is " + obj["title"].toString()<< endl;
+            QTextStream(stdout) << "filename is " + obj["filename"].toString()<< endl;
+            QTextStream(stdout) << "date is " + obj["date"].toString()<< endl;
+            QTextStream(stdout) << "size is " + obj["size"].toInt()<< endl;
+            QTextStream(stdout) << "author is " + obj["author"].toString()<< endl;
+            double rating = obj["rating"].toDouble();
+            QTextStream(stdout) << rating<< endl;
 
         }
 
-
-
-        // Display file names
-        for(int i =0; i < fileNames.length(); i++)
-        {
-            ui->textBrowser->append(fileNames.at(i));
-        }
     }
+
     else
     {
        qDebug() << "ERROR" << endl;
