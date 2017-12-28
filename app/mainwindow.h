@@ -15,6 +15,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
+    static const QString QUERY_STRING;
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 

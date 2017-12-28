@@ -1,6 +1,8 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+const QString MainWindow::QUERY_STRING = QString("https://legacy.doomworld.com/idgames//api/api.php?action=search&query=");
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -36,12 +38,12 @@ void MainWindow::search(QString searchText, QString searchCategory, QString sort
     QString urlSearch = searchText.toLower();
     QString urlSearchCategory = searchCategory.toLower();
     QString urlSortCategory = sortCategory.toLower();
+    QString urlSortOrder = order.toLower();
 
     // API URL
-    //https://legacy.doomworld.com/idgames//api/api.php?action=
-    // https://legacy.doomworld.com/idgames//api/api.php?action=search&query=chest&type=filename&sort=date&out=json
-    QString urlString = "https://legacy.doomworld.com/idgames//api/api.php?action=search&query=" + urlSearch + "&type=" + urlSearchCategory + "&sort="
-            + urlSortCategory + "&out=json";
+    // https://legacy.doomworld.com/idgames//api/api.php?action=search&query
+    QString urlString = QString(QUERY_STRING) + urlSearch + "&type=" + urlSearchCategory + "&sort="
+            + urlSortCategory + "&dir=" + urlSortOrder + "&out=json";
 
     connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(onResult(QNetworkReply*)));
 
