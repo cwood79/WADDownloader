@@ -16,6 +16,7 @@ class MainWindow : public QMainWindow
 
 public:
     static const QString QUERY_STRING;
+    static const QString NEW_YORK_URL;
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
@@ -26,7 +27,6 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
-    //static const QString API_URL = "https://legacy.doomworld.com/idgames//api/api.php?action=";
     QNetworkAccessManager *manager;
 };
 

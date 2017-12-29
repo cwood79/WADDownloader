@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 
 const QString MainWindow::QUERY_STRING = QString("https://legacy.doomworld.com/idgames//api/api.php?action=search&query=");
+const QString MainWindow::NEW_YORK_URL = QString("http://youfailit.net/pub/");
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -17,7 +18,6 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_searchbutton_clicked()
 {
-
     // grab input
     QString searchText = ui->searchbar->text();
     QString searchCategory = ui->category->currentText();
@@ -67,15 +67,23 @@ void MainWindow::onResult(QNetworkReply* reply)
         foreach (const QJsonValue & file, files)
         {
             QJsonObject obj = file.toObject();
+
+            QTextStream(stdout) << "" << endl;
+
             QTextStream(stdout) << "title is " + obj["title"].toString()<< endl;
             QTextStream(stdout) << "filename is " + obj["filename"].toString()<< endl;
             QTextStream(stdout) << "date is " + obj["date"].toString()<< endl;
-            QTextStream(stdout) << "size is " + obj["size"].toInt()<< endl;
+
+            int size = obj["size"].toInt();
+            QTextStream(stdout) << size << endl;
+
             QTextStream(stdout) << "author is " + obj["author"].toString()<< endl;
+
             double rating = obj["rating"].toDouble();
             QTextStream(stdout) << rating<< endl;
-
+            //update textbrowser
         }
+
 
     }
 
