@@ -6,18 +6,15 @@ const QString MainWindow::NEW_YORK_URL = QString("http://youfailit.net/pub/");
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow)
-{
+    ui(new Ui::MainWindow) {
     ui->setupUi(this);
 }
 
-MainWindow::~MainWindow()
-{
+MainWindow::~MainWindow() {
     delete ui;
 }
 
-void MainWindow::on_searchbutton_clicked()
-{
+void MainWindow::on_searchbutton_clicked() {
     // grab input
     QString searchText = ui->searchbar->text();
     QString searchCategory = ui->category->currentText();
@@ -25,6 +22,7 @@ void MainWindow::on_searchbutton_clicked()
     QString order = ui->order->currentText();
 
     // clear text browser
+
     ui->textBrowser->setText("");
 
     /*QTextStream(stdout) << "Search text is " + searchText << endl;
@@ -35,8 +33,7 @@ void MainWindow::on_searchbutton_clicked()
     search(searchText, searchCategory, sortCategory, order);
 }
 
-void MainWindow::search(QString searchText, QString searchCategory, QString sortCategory, QString order)
-{
+void MainWindow::search(QString searchText, QString searchCategory, QString sortCategory, QString order) {
     manager = new QNetworkAccessManager(this);
     QString urlSearch = searchText.toLower();
     QString urlSearchCategory = searchCategory.toLower();
@@ -55,10 +52,8 @@ void MainWindow::search(QString searchText, QString searchCategory, QString sort
     QNetworkReply* currentReply = manager->get(QNetworkRequest(url));
 }
 
-void MainWindow::onResult(QNetworkReply* reply)
-{
-    if(reply->error() == QNetworkReply::NoError)
-    {
+void MainWindow::onResult(QNetworkReply* reply) {
+    if(reply->error() == QNetworkReply::NoError) {
         QTextStream(stdout) << "JSON RECEIVED!" << endl;
         QString strReply = (QString)reply->readAll();
         QJsonDocument jsonResponse = QJsonDocument::fromJson(strReply.toUtf8());
@@ -67,10 +62,8 @@ void MainWindow::onResult(QNetworkReply* reply)
         QJsonObject content = root["content"].toObject();
         QJsonArray files = content["file"].toArray();
 
-        foreach (const QJsonValue & file, files)
-        {
+        foreach (const QJsonValue & file, files) {
             QJsonObject obj = file.toObject();
-
 
             QTextStream(stdout) << "" << endl;
 
@@ -86,23 +79,32 @@ void MainWindow::onResult(QNetworkReply* reply)
             int size = obj["size"].toInt();
             QTextStream(stdout) << size << endl;
 
-            QTextStream(stdout) << "author is " + obj["author"].toString()<< endl;
+            QString author = obj["author"].toString();
+            QTextStream(stdout) << "author is " + author<< endl;
 
             double rating = obj["rating"].toDouble();
             QTextStream(stdout) << rating<< endl;
             //update textbrowser
+            Wad * wadFile = new Wad(title, filename, date, size, author, rating);
+            wadSearchList.append(wadFile);
 
-            ui->textBrowser->append(title);
         }
+
+        updateDisplay(wadSearchList);
 
 
     }
 
-    else
-    {
+    else {
        qDebug() << "ERROR" << endl;
        delete reply;
     }
 
 }
 
+void MainWindow::updateDisplay(QList<Wad*> searchList) {
+    foreach(Wad * w , searchList){
+
+        ui->textBrowser->append(w->getTitle());
+    }
+}
