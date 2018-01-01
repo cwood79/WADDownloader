@@ -24,6 +24,9 @@ void MainWindow::on_searchbutton_clicked()
     QString sortCategory = ui->sortcategory->currentText();
     QString order = ui->order->currentText();
 
+    // clear text browser
+    ui->textBrowser->setText("");
+
     /*QTextStream(stdout) << "Search text is " + searchText << endl;
     QTextStream(stdout) << "Search category is " + searchCategory << endl;
     QTextStream(stdout) << "Sort category is " + sortCategory << endl;
@@ -68,11 +71,17 @@ void MainWindow::onResult(QNetworkReply* reply)
         {
             QJsonObject obj = file.toObject();
 
+
             QTextStream(stdout) << "" << endl;
 
-            QTextStream(stdout) << "title is " + obj["title"].toString()<< endl;
-            QTextStream(stdout) << "filename is " + obj["filename"].toString()<< endl;
-            QTextStream(stdout) << "date is " + obj["date"].toString()<< endl;
+            QString title = obj["title"].toString();
+            QTextStream(stdout) << "title is " + title<< endl;
+
+            QString filename = obj["filename"].toString();
+            QTextStream(stdout) << "filename is " + filename << endl;
+
+            QString date = obj["date"].toString();
+            QTextStream(stdout) << "date is " + date << endl;
 
             int size = obj["size"].toInt();
             QTextStream(stdout) << size << endl;
@@ -82,6 +91,8 @@ void MainWindow::onResult(QNetworkReply* reply)
             double rating = obj["rating"].toDouble();
             QTextStream(stdout) << rating<< endl;
             //update textbrowser
+
+            ui->textBrowser->append(title);
         }
 
 
