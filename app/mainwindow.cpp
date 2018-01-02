@@ -21,9 +21,11 @@ void MainWindow::on_searchbutton_clicked() {
     QString sortCategory = ui->sortcategory->currentText();
     QString order = ui->order->currentText();
 
-    // clear text browser
-
+    // clear text browser and search results
+    wadSearchList.clear();
     ui->textBrowser->setText("");
+    ui->textBrowser->show();
+
 
     /*QTextStream(stdout) << "Search text is " + searchText << endl;
     QTextStream(stdout) << "Search category is " + searchCategory << endl;
@@ -65,27 +67,30 @@ void MainWindow::onResult(QNetworkReply* reply) {
         foreach (const QJsonValue & file, files) {
             QJsonObject obj = file.toObject();
 
-            QTextStream(stdout) << "" << endl;
+           // QTextStream(stdout) << "" << endl;
 
             QString title = obj["title"].toString();
-            QTextStream(stdout) << "title is " + title<< endl;
+           // QTextStream(stdout) << "title is " + title<< endl;
 
             QString filename = obj["filename"].toString();
-            QTextStream(stdout) << "filename is " + filename << endl;
+         //   QTextStream(stdout) << "filename is " + filename << endl;
+
+            QString description = obj["description"].toString();
+         //   QTextStream(stdout) << "description is " + description << endl;
 
             QString date = obj["date"].toString();
-            QTextStream(stdout) << "date is " + date << endl;
+        //    QTextStream(stdout) << "date is " + date << endl;
 
             int size = obj["size"].toInt();
-            QTextStream(stdout) << size << endl;
+         //   QTextStream(stdout) << size << endl;
 
             QString author = obj["author"].toString();
-            QTextStream(stdout) << "author is " + author<< endl;
+        //    QTextStream(stdout) << "author is " + author<< endl;
 
             double rating = obj["rating"].toDouble();
-            QTextStream(stdout) << rating<< endl;
+        //    QTextStream(stdout) << rating<< endl;
             //update textbrowser
-            Wad * wadFile = new Wad(title, filename, date, size, author, rating);
+            Wad * wadFile = new Wad(title, filename, description, date, size, author, rating);
             wadSearchList.append(wadFile);
 
         }
@@ -103,8 +108,15 @@ void MainWindow::onResult(QNetworkReply* reply) {
 }
 
 void MainWindow::updateDisplay(QList<Wad*> searchList) {
+    QString searchHTML = "";
     foreach(Wad * w , searchList){
 
-        ui->textBrowser->append(w->getTitle());
+      //  QTextStream(stdout) << w->toHTML() << endl;
+        searchHTML += w->toHTML();
+
+
     }
+
+    ui->textBrowser->setHtml(searchHTML);
+    ui->textBrowser->show();
 }
