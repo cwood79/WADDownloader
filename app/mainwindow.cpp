@@ -23,8 +23,8 @@ void MainWindow::on_searchbutton_clicked() {
 
     // clear text browser and search results
     wadSearchList.clear();
-    ui->textBrowser->setText("");
-    ui->textBrowser->show();
+   // ui->textBrowser->setText("");
+   // ui->textBrowser->show();
 
 
     /*QTextStream(stdout) << "Search text is " + searchText << endl;
@@ -108,15 +108,30 @@ void MainWindow::onResult(QNetworkReply* reply) {
 }
 
 void MainWindow::updateDisplay(QList<Wad*> searchList) {
-    QString searchHTML = "";
-    foreach(Wad * w , searchList){
+    //QString searchHTML = "";
+    //foreach(Wad * w , searchList){
+
+       QListWidgetItem *listWidgetItem = new QListWidgetItem(ui->listWidget);
+
+       ui->listWidget->addItem(listWidgetItem);
+
+       //Creating an object of the designed widget which is to be added to the listwidget
+        WadListWidget * wadlistwidget = new WadListWidget;
+
+        //Making sure that the listWidgetItem has the same size as the TheWidgetItem
+        listWidgetItem->setSizeHint (wadlistwidget->sizeHint ());
+
+        //Finally adding the itemWidget to the list
+        ui->listWidget->setItemWidget (listWidgetItem, wadlistwidget);
+
+
 
       //  QTextStream(stdout) << w->toHTML() << endl;
-        searchHTML += w->toHTML();
+//        searchHTML += w->toHTML();
 
 
-    }
+    //}
 
-    ui->textBrowser->setHtml(searchHTML);
-    ui->textBrowser->show();
+    //ui->textBrowser->setHtml(searchHTML);
+    //ui->textBrowser->show();
 }

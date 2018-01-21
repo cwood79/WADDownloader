@@ -14,177 +14,152 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QPushButton" name="pushButton">
-    <property name="geometry">
-     <rect>
-      <x>650</x>
-      <y>360</y>
-      <width>75</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Download</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="settings">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>360</y>
-      <width>75</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Settings</string>
-    </property>
-   </widget>
-   <widget class="QTextBrowser" name="textBrowser">
-    <property name="geometry">
-     <rect>
-      <x>30</x>
-      <y>60</y>
-      <width>681</width>
-      <height>281</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QWidget" name="layoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>30</x>
-      <y>20</y>
-      <width>542</width>
-      <height>25</height>
-     </rect>
-    </property>
-    <layout class="QHBoxLayout" name="horizontalLayout">
-     <item>
-      <widget class="QLabel" name="searchlabel">
-       <property name="text">
-        <string>Search</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QComboBox" name="category">
-       <item>
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="1" column="0" colspan="2">
+     <widget class="QListWidget" name="listWidget"/>
+    </item>
+    <item row="2" column="0">
+     <widget class="QPushButton" name="settings">
+      <property name="text">
+       <string>Settings</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1">
+     <widget class="QPushButton" name="pushButton">
+      <property name="text">
+       <string>Download</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="0" colspan="2">
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QLabel" name="searchlabel">
         <property name="text">
-         <string>Filename</string>
+         <string>Search</string>
         </property>
-       </item>
-       <item>
+       </widget>
+      </item>
+      <item>
+       <widget class="QComboBox" name="category">
+        <item>
+         <property name="text">
+          <string>Filename</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Title</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Author</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>E-mail</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Description</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Credits</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Editor</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Whole textfile</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_2">
         <property name="text">
-         <string>Title</string>
+         <string>For</string>
         </property>
-       </item>
-       <item>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="searchbar"/>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_3">
         <property name="text">
-         <string>Author</string>
+         <string>sort by</string>
         </property>
-       </item>
-       <item>
+       </widget>
+      </item>
+      <item>
+       <widget class="QComboBox" name="sortcategory">
+        <item>
+         <property name="text">
+          <string>Date</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Filename</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Title</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Author</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Size</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Rating</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item>
+       <widget class="QComboBox" name="order">
+        <item>
+         <property name="text">
+          <string>Asc</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Desc</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="searchbutton">
         <property name="text">
-         <string>E-mail</string>
+         <string>Search</string>
         </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Description</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Credits</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Editor</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Whole textfile</string>
-        </property>
-       </item>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="label_2">
-       <property name="text">
-        <string>For</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLineEdit" name="searchbar"/>
-     </item>
-     <item>
-      <widget class="QLabel" name="label_3">
-       <property name="text">
-        <string>sort by</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QComboBox" name="sortcategory">
-       <item>
-        <property name="text">
-         <string>Date</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Filename</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Title</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Author</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Size</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Rating</string>
-        </property>
-       </item>
-      </widget>
-     </item>
-     <item>
-      <widget class="QComboBox" name="order">
-       <item>
-        <property name="text">
-         <string>Asc</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Desc</string>
-        </property>
-       </item>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="searchbutton">
-       <property name="text">
-        <string>Search</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
+       </widget>
+      </item>
+     </layout>
+    </item>
+   </layout>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">

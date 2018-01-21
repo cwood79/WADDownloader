@@ -7,6 +7,7 @@
 #include <QScriptValueIterator>
 #include <Iterator>
 #include "wad.h"
+#include "resources\uis\wadlistwidget.h"
 
 namespace Ui {
 class MainWindow;

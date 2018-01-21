@@ -26,14 +26,17 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     app/main.cpp \
     app/mainwindow.cpp \
-    app/wad.cpp
+    app/wad.cpp \
+    resources/uis/wadlistwidget.cpp
 
 HEADERS += \
     app/mainwindow.h \
-    app/wad.h
+    app/wad.h \
+    resources/uis/wadlistwidget.h
 
 FORMS += \
-    resources/uis/mainwindow.ui
+    resources/uis/mainwindow.ui \
+    resources/uis/wadlistwidget.ui
 
 SUBDIRS += \
     WADDownloader.pro
