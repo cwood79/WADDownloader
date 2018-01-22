@@ -1,5 +1,6 @@
 #include "wad.h"
 
+// Class to represent wad files
 Wad::Wad() {
 
 }
@@ -15,16 +16,9 @@ Wad::Wad(QString title, QString filename, QString description, QString date, int
     this->rating=rating;
 }
 
-
-// returns a html representation of the wad file
-QString Wad::toHTML() {
-    //QString html = "<h1>" + this->title +"</h1>";
-    QString html = "<table><tbody><tr><td>"+this->title + "<span> RATING:"+QString::number(this->rating)+" </span></td><td>FILENAME</td><td>"+this->filename+"</td></tr><tr><td>" + this->description+"</td><td>DATE</td><td>"+this->date+"</td></tr><tr><td>SIZE</td><td>"+QString::number(this->filesize)+"</td></tr><tr><td>AUTHOR</td><td>"+this->author+"</td></tr></tbody></table>";
-    return html;
-}
-
-
+// Accessors/Mutators
 void Wad::setTitle(QString title) {
+
     this->title = title;
 }
 
@@ -40,7 +34,7 @@ void Wad::setDate(QString date) {
     this->date = date;
 }
 
-void Wad::setfileSize(int filesize) {
+void Wad::setFileSize(int filesize) {
     this->filesize = filesize;
 }
 
@@ -66,6 +60,10 @@ QString Wad::getDescription(){
 
 QString Wad::getDate() {
     return this->date;
+}
+
+int Wad::getFileSize() {
+    return this->filesize;
 }
 
 QString Wad::getAuthor() {

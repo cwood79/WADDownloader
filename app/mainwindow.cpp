@@ -21,20 +21,14 @@ void MainWindow::on_searchbutton_clicked() {
     QString sortCategory = ui->sortcategory->currentText();
     QString order = ui->order->currentText();
 
-    // clear text browser and search results
+    // clear search results and listwidget before searching again
     wadSearchList.clear();
-   // ui->textBrowser->setText("");
-   // ui->textBrowser->show();
-
-
-    /*QTextStream(stdout) << "Search text is " + searchText << endl;
-    QTextStream(stdout) << "Search category is " + searchCategory << endl;
-    QTextStream(stdout) << "Sort category is " + sortCategory << endl;
-    QTextStream(stdout) << "Order is " + order << endl; */
+    ui->listWidget->clear();
 
     search(searchText, searchCategory, sortCategory, order);
 }
 
+// Function to handle api call and search
 void MainWindow::search(QString searchText, QString searchCategory, QString sortCategory, QString order) {
     manager = new QNetworkAccessManager(this);
     QString urlSearch = searchText.toLower();
@@ -54,6 +48,7 @@ void MainWindow::search(QString searchText, QString searchCategory, QString sort
     QNetworkReply* currentReply = manager->get(QNetworkRequest(url));
 }
 
+// Function to handle api call results
 void MainWindow::onResult(QNetworkReply* reply) {
     if(reply->error() == QNetworkReply::NoError) {
         QTextStream(stdout) << "JSON RECEIVED!" << endl;
@@ -64,42 +59,28 @@ void MainWindow::onResult(QNetworkReply* reply) {
         QJsonObject content = root["content"].toObject();
         QJsonArray files = content["file"].toArray();
 
+        // Parsing JSON from api request and creating Wad objects for display
         foreach (const QJsonValue & file, files) {
             QJsonObject obj = file.toObject();
 
-           // QTextStream(stdout) << "" << endl;
-
+            // Getting fields from JSON object from api call
             QString title = obj["title"].toString();
-           // QTextStream(stdout) << "title is " + title<< endl;
-
             QString filename = obj["filename"].toString();
-         //   QTextStream(stdout) << "filename is " + filename << endl;
-
             QString description = obj["description"].toString();
-         //   QTextStream(stdout) << "description is " + description << endl;
-
             QString date = obj["date"].toString();
-        //    QTextStream(stdout) << "date is " + date << endl;
-
             int size = obj["size"].toInt();
-         //   QTextStream(stdout) << size << endl;
-
             QString author = obj["author"].toString();
-        //    QTextStream(stdout) << "author is " + author<< endl;
-
             double rating = obj["rating"].toDouble();
-        //    QTextStream(stdout) << rating<< endl;
-            //update textbrowser
+
             Wad * wadFile = new Wad(title, filename, description, date, size, author, rating);
             wadSearchList.append(wadFile);
 
         }
 
         updateDisplay(wadSearchList);
-
-
     }
 
+    // Error handling if api call fails
     else {
        qDebug() << "ERROR" << endl;
        delete reply;
@@ -107,31 +88,28 @@ void MainWindow::onResult(QNetworkReply* reply) {
 
 }
 
+// Update listWidget to display results
 void MainWindow::updateDisplay(QList<Wad*> searchList) {
-    //QString searchHTML = "";
-    //foreach(Wad * w , searchList){
 
+    foreach(Wad * w , searchList){
+       // Creating a new ListWidgetItem whose parent is the listWidget
        QListWidgetItem *listWidgetItem = new QListWidgetItem(ui->listWidget);
 
+       // Adding ListWidgetItem to listWidget
        ui->listWidget->addItem(listWidgetItem);
 
-       //Creating an object of the designed widget which is to be added to the listwidget
-        WadListWidget * wadlistwidget = new WadListWidget;
+       //Creating an object of the designed widget to add to listWidget
+       //Setting fields of widget with data from api call
+       WadListWidget * wadlistwidget = new WadListWidget();
+       wadlistwidget->setFields(*w);
 
-        //Making sure that the listWidgetItem has the same size as the TheWidgetItem
-        listWidgetItem->setSizeHint (wadlistwidget->sizeHint ());
+       //Making sure that the listWidgetItem has the same size as the wadlistwidget
+       listWidgetItem->setSizeHint (wadlistwidget->sizeHint());
 
-        //Finally adding the itemWidget to the list
-        ui->listWidget->setItemWidget (listWidgetItem, wadlistwidget);
+       // Add the itemWidget to the list
+       ui->listWidget->setItemWidget (listWidgetItem, wadlistwidget);
 
+    }
 
-
-      //  QTextStream(stdout) << w->toHTML() << endl;
-//        searchHTML += w->toHTML();
-
-
-    //}
-
-    //ui->textBrowser->setHtml(searchHTML);
-    //ui->textBrowser->show();
+    ui->listWidget->show();
 }

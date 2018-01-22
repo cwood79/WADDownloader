@@ -16,13 +16,12 @@ class Wad
 public:
     Wad();
     Wad(QString title, QString filename, QString description, QString date, int filesize, QString author, double rating);
-    QString toHTML();
 
     void setTitle(QString title);
     void setFileName(QString filename);
     void setDescription(QString description);
     void setDate(QString date);
-    void setfileSize(int filesize);
+    void setFileSize(int filesize);
     void setAuthor(QString author);
     void setRating(double rating);
 
@@ -30,7 +29,7 @@ public:
     QString getFileName();
     QString getDescription();
     QString getDate();
-    int getfileSize();
+    int getFileSize();
     QString getAuthor();
     double getRating();
 

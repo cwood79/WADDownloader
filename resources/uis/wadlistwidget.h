@@ -2,6 +2,7 @@
 #define WADLISTWIDGET_H
 
 #include <QWidget>
+#include "../../app/wad.h"
 
 namespace Ui {
 class WadListWidget;
@@ -14,6 +15,7 @@ class WadListWidget : public QWidget
 public:
     explicit WadListWidget(QWidget *parent = 0);
     ~WadListWidget();
+    void setFields(Wad w);
 
 private:
     Ui::WadListWidget *ui;
