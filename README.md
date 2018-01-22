@@ -1,7 +1,7 @@
 # WADDownloader
 QT Application to download custom WAD files from idgames/database
 
---WAD Definition (from https://doomwiki.org/wiki/WAD)--
+WAD Definition (from https://doomwiki.org/wiki/WAD)
 
 WAD (which, according to the Doom Bible, is an acronym for "Where's All the Data?"[1]) is the file format used by Doom and all Doom-engine-based games for storing data. A WAD file consists of a header, a directory, and the data lumps that make up the resources stored within the file. A WAD file can be of two types:
 
