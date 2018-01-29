@@ -14,7 +14,7 @@ WadListWidget::~WadListWidget()
     delete ui;
 }
 
-
+// TODO: Put this in a constructor at some point
 // Function to set fields of WadListWidget
 void WadListWidget::setFields(Wad w)
 {
@@ -23,6 +23,6 @@ void WadListWidget::setFields(Wad w)
     ui->filenameField->setText(w.getFileName());
     ui->description->setText(w.getDescription());
     ui->dateField->setText(w.getDate());
-    ui->sizeField->setText(QString::number(w.getFileSize()));
+    ui->sizeField->setText(QString::number(w.getFileSize()/1024)+"KB"); // convert to KB for display
     ui->authorField->setText(w.getAuthor());
 }

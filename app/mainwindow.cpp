@@ -2,12 +2,18 @@
 #include "ui_mainwindow.h"
 
 const QString MainWindow::QUERY_STRING = QString("https://legacy.doomworld.com/idgames//api/api.php?action=search&query=");
-const QString MainWindow::NEW_YORK_URL = QString("http://youfailit.net/pub/");
+//const QString MainWindow::NEW_YORK_URL = QString("http://youfailit.net/pub/");
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow) {
     ui->setupUi(this);
+    manager = new QNetworkAccessManager(this);
+
+    // Connect manager to signals
+    connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(onResult(QNetworkReply*)));
+    connect(manager, SIGNAL(finished(QNetworkReply*)),
+               this, SLOT(replyFinished(QNetworkReply*)));
 }
 
 MainWindow::~MainWindow() {
@@ -30,7 +36,6 @@ void MainWindow::on_searchbutton_clicked() {
 
 // Function to handle api call and search
 void MainWindow::search(QString searchText, QString searchCategory, QString sortCategory, QString order) {
-    manager = new QNetworkAccessManager(this);
     QString urlSearch = searchText.toLower();
     QString urlSearchCategory = searchCategory.toLower();
     QString urlSortCategory = sortCategory.toLower();
@@ -41,11 +46,11 @@ void MainWindow::search(QString searchText, QString searchCategory, QString sort
     QString urlString = QString(QUERY_STRING) + urlSearch + "&type=" + urlSearchCategory + "&sort="
             + urlSortCategory + "&dir=" + urlSortOrder + "&out=json";
 
-    connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(onResult(QNetworkReply*)));
+
 
     QTextStream(stdout) << "Calling API at " + urlString << endl;
     QUrl url(urlString);
-    QNetworkReply* currentReply = manager->get(QNetworkRequest(url));
+    /*QNetworkReply* currentReply =*/ manager->get(QNetworkRequest(url));
 }
 
 // Function to handle api call results
@@ -66,13 +71,14 @@ void MainWindow::onResult(QNetworkReply* reply) {
             // Getting fields from JSON object from api call
             QString title = obj["title"].toString();
             QString filename = obj["filename"].toString();
+            QString dir = obj["dir"].toString();
             QString description = obj["description"].toString();
             QString date = obj["date"].toString();
             int size = obj["size"].toInt();
             QString author = obj["author"].toString();
             double rating = obj["rating"].toDouble();
 
-            Wad * wadFile = new Wad(title, filename, description, date, size, author, rating);
+            Wad * wadFile = new Wad(title, filename, dir, description, date, size, author, rating);
             wadSearchList.append(wadFile);
 
         }
@@ -112,4 +118,63 @@ void MainWindow::updateDisplay(QList<Wad*> searchList) {
     }
 
     ui->listWidget->show();
+}
+
+
+void MainWindow::on_downloadbutton_clicked() {
+    // Get input from listWidget
+    // do some stuff
+
+    // Download file
+    QTextStream(stdout) << "DOWNLOAD!" << endl;
+
+    QString filename = "doom0_2.zip";
+    QString url= "";
+    QString location = "";
+
+    doDownload(filename, url, location);
+
+}
+
+void MainWindow::doDownload(QString filename, QString url, QString location)
+{
+    // Open Connection
+    manager->get(QNetworkRequest(QUrl("http://youfailit.net/pub/idgames/historic/"+filename)));
+
+
+}
+
+void MainWindow::replyFinished(QNetworkReply *reply) {
+
+    if(reply->error())
+        {
+            qDebug() << "ERROR!";
+            qDebug() << reply->errorString();
+        }
+        else
+        {
+            qDebug() << reply->header(QNetworkRequest::ContentTypeHeader).toString();
+            qDebug() << reply->header(QNetworkRequest::LastModifiedHeader).toDateTime().toString();
+            qDebug() << reply->header(QNetworkRequest::ContentLengthHeader).toULongLong();
+            qDebug() << reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+            qDebug() << reply->attribute(QNetworkRequest::HttpReasonPhraseAttribute).toString();
+
+            QFile *file = new QFile("C:/Qt/Dummy/downloaded.zip");
+            if(file->open(QFile::Append))
+            {
+                file->write(reply->readAll());
+                file->flush();
+                file->close();
+            }
+            delete file;
+        }
+
+        reply->deleteLater();
+
+}
+
+
+void MainWindow::on_settingsbutton_clicked() {
+    // open settings window
+    QTextStream(stdout) << "SETTINGS!" << endl;
 }

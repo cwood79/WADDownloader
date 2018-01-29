@@ -5,10 +5,11 @@ Wad::Wad() {
 
 }
 
-Wad::Wad(QString title, QString filename, QString description, QString date, int filesize, QString author, double rating) {
+Wad::Wad(QString title, QString filename, QString dir, QString description, QString date, int filesize, QString author, double rating) {
 
     this->title=title;
     this->filename=filename;
+    this->dir = dir;
     this->description=description;
     this->date=date;
     this->filesize=filesize;
@@ -24,6 +25,10 @@ void Wad::setTitle(QString title) {
 
 void Wad::setFileName(QString filename){
     this->filename = filename;
+}
+
+void Wad::setDir(QString dir){
+    this->dir = dir;
 }
 
 void Wad::setDescription(QString description){
@@ -52,6 +57,10 @@ QString Wad::getTitle() {
 
 QString Wad::getFileName() {
     return this->filename;
+}
+
+QString Wad::getDir(){
+    return this->dir;
 }
 
 QString Wad::getDescription(){
