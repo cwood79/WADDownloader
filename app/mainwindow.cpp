@@ -2,7 +2,7 @@
 #include "ui_mainwindow.h"
 
 const QString MainWindow::QUERY_STRING = QString("https://legacy.doomworld.com/idgames//api/api.php?action=search&query=");
-//const QString MainWindow::NEW_YORK_URL = QString("http://youfailit.net/pub/");
+//const QString MainWindow::NEW_YORK_URL = QString("http://youfailit.net/pub/idgames/");
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -10,10 +10,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     manager = new QNetworkAccessManager(this);
 
-    // Connect manager to signals
-    connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(onResult(QNetworkReply*)));
-    connect(manager, SIGNAL(finished(QNetworkReply*)),
-               this, SLOT(replyFinished(QNetworkReply*)));
 }
 
 MainWindow::~MainWindow() {
@@ -46,7 +42,7 @@ void MainWindow::search(QString searchText, QString searchCategory, QString sort
     QString urlString = QString(QUERY_STRING) + urlSearch + "&type=" + urlSearchCategory + "&sort="
             + urlSortCategory + "&dir=" + urlSortOrder + "&out=json";
 
-
+    connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(onResult(QNetworkReply*)));
 
     QTextStream(stdout) << "Calling API at " + urlString << endl;
     QUrl url(urlString);
@@ -128,6 +124,7 @@ void MainWindow::on_downloadbutton_clicked() {
     // Download file
     QTextStream(stdout) << "DOWNLOAD!" << endl;
 
+    // Placeholder
     QString filename = "doom0_2.zip";
     QString url= "";
     QString location = "";
@@ -136,40 +133,50 @@ void MainWindow::on_downloadbutton_clicked() {
 
 }
 
-void MainWindow::doDownload(QString filename, QString url, QString location)
-{
-    // Open Connection
-    manager->get(QNetworkRequest(QUrl("http://youfailit.net/pub/idgames/historic/"+filename)));
+void MainWindow::doDownload(QString filename, QString url, QString location) {
 
+    connect(manager, SIGNAL(finished(QNetworkReply*)),
+               this, SLOT(replyFinished(QNetworkReply*)));
+
+    // Open Connection
+    // Placeholder for now
+    //manager->get(QNetworkRequest(QUrl("http://youfailit.net/pub/idgames/" + dir + filename)));
+
+    manager->get(QNetworkRequest(QUrl("http://youfailit.net/pub/idgames/historic/"+filename)));
 
 }
 
 void MainWindow::replyFinished(QNetworkReply *reply) {
 
-    if(reply->error())
-        {
-            qDebug() << "ERROR!";
-            qDebug() << reply->errorString();
-        }
-        else
-        {
-            qDebug() << reply->header(QNetworkRequest::ContentTypeHeader).toString();
-            qDebug() << reply->header(QNetworkRequest::LastModifiedHeader).toDateTime().toString();
-            qDebug() << reply->header(QNetworkRequest::ContentLengthHeader).toULongLong();
-            qDebug() << reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
-            qDebug() << reply->attribute(QNetworkRequest::HttpReasonPhraseAttribute).toString();
+    if(reply->error()) {
+        qDebug() << "ERROR!";
+        qDebug() << reply->errorString();
+    }
+    else {
 
-            QFile *file = new QFile("C:/Qt/Dummy/downloaded.zip");
-            if(file->open(QFile::Append))
-            {
+        qDebug() << reply->header(QNetworkRequest::ContentTypeHeader).toString();
+        qDebug() << reply->header(QNetworkRequest::LastModifiedHeader).toDateTime().toString();
+        qDebug() << reply->header(QNetworkRequest::ContentLengthHeader).toULongLong();
+        qDebug() << reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+        qDebug() << reply->attribute(QNetworkRequest::HttpReasonPhraseAttribute).toString();
+        qDebug() << reply->header(QNetworkRequest::ContentTypeHeader).toString();
+        qDebug() << reply->url().toString() << endl;
+
+       // QString strReply = (QString)reply->readAll();
+
+        QFile *file = new QFile(reply->url().fileName());
+
+        //qDebug() << "REPLY IS " + strReply << endl;
+        if(file->open(QFile::Append))
+        {
                 file->write(reply->readAll());
                 file->flush();
                 file->close();
-            }
-            delete file;
         }
+        delete file;
+   }
 
-        reply->deleteLater();
+   reply->deleteLater();
 
 }
 
