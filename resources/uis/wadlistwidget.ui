@@ -84,13 +84,6 @@
    <item row="1" column="0">
     <widget class="QTextEdit" name="description"/>
    </item>
-   <item row="1" column="2">
-    <widget class="QCheckBox" name="downloadBox">
-     <property name="text">
-      <string>Download</string>
-     </property>
-    </widget>
-   </item>
   </layout>
  </widget>
  <resources/>

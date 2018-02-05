@@ -31,7 +31,7 @@ private slots:
     void on_downloadbutton_clicked();
     void on_settingsbutton_clicked();
     void search(QString searchText, QString searchCategory, QString sortCategory, QString order);
-    void doDownload(QString filename, QString url, QString location);
+    void doDownload(QString filename, QString directory);
     void onResult(QNetworkReply* reply);
     void replyFinished(QNetworkReply *reply);
     void updateDisplay(QList<Wad*> searchList);
