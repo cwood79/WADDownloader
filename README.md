@@ -15,3 +15,11 @@ PWAD: A "Patch WAD", or an optional file that replaces data from the IWAD loaded
 
 Uses the idGames API created by Matt Tropiano found here.
 https://legacy.doomworld.com/idgames//api/
+
+#Instructions
+1. Input text into Search field
+2. Choose search parameters from dropdown menus if any
+3. Click Search
+4. Click on File to Download
+5. Click Download
+
