@@ -27,19 +27,22 @@ SOURCES += \
     app/main.cpp \
     app/mainwindow.cpp \
     app/wad.cpp \
-    resources/uis/wadlistwidget.cpp
+    resources/uis/wadlistwidget.cpp \
+    resources/uis/settingswindow.cpp
 
 HEADERS += \
     app/mainwindow.h \
     app/wad.h \
-    resources/uis/wadlistwidget.h
+    resources/uis/wadlistwidget.h \
+    resources/uis/settingswindow.h
 
 FORMS += \
     resources/uis/mainwindow.ui \
-    resources/uis/wadlistwidget.ui
+    resources/uis/wadlistwidget.ui \
+    resources/uis/settingswindow.ui
 
 SUBDIRS += \
     WADDownloader.pro
 
 DISTFILES += \
-    README.md
+    README.md \

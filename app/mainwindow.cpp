@@ -91,6 +91,8 @@ void MainWindow::onResult(QNetworkReply* reply) {
        delete reply;
     }
 
+    reply->deleteLater();
+
 }
 
 // Update listWidget to display results
